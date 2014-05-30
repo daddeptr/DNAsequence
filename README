@@ -17,3 +17,5 @@ Two files are present at the moment:
 2- a more systematic piece of software in cpp
    compile with:
    g++ -O kdiff_strmatch.cpp -o kdiff_strmatch
+
+   Run with -h option to print the help.
