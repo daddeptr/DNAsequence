@@ -11,3 +11,9 @@ String matching algorithm targeting DNA sequencing.
 Please, contact davide.pietrobon@berkeley.edu for bus and explanations.
 
 Have a good one!
+
+Two files are present at the moment:
+1- a python script with testing routines
+2- a more systematic piece of software in cpp
+   compile with:
+   g++ -O kdiff_strmatch.cpp -o kdiff_strmatch
