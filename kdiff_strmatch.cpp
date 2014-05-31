@@ -298,7 +298,7 @@ int main(int argc, char** argv){
 
 		int cnt = 0;
 
-		string tmp = "";
+//		string tmp = "";
 // Reading sequences in fasta format line by line and performing the search on the fly
 		while (!file.eof()){
 			getline (file, T);
@@ -346,9 +346,11 @@ int main(int argc, char** argv){
 		ofile.open ( outfile.c_str() );
 		ofile << text;
 		ofile.close();
-	}
 
-	if(bflag){
+		printf("Processed %i sequences.", cnt);
+
+	}
+	else if(bflag){
 		string P = bvalue;
 		int m = P.length();
 		if(!rflag){
@@ -408,6 +410,76 @@ int main(int argc, char** argv){
 		ofile.open ( outfile.c_str() );
 		ofile << text;
 		ofile.close();
+		
+		printf("Processed %i sequences.", cnt);
+
+	}
+	else if(tflag){
+
+//		string P = evalue;
+//		int m = P.length();
+//		if(!rflag){
+//			r = m;
+//		}
+//		else{
+//			r = m - r;
+//		}
+//
+//		printf(" - ending match = %d\n", r);
+		ifstream file( infile.c_str() );
+
+		int cnt = 0;
+
+//		string tmp = "";
+// Reading sequences in fasta format line by line and performing the search on the fly
+		while (!file.eof()){
+			getline (file, T);
+			if (T.substr(0,1) == ">"){
+				text.append (T+"\n"); // Added this line
+			}
+			else{
+//				cnt += 1;
+				int n = T.length();
+//				int Table[(m+1)*(n+1)]; 
+//				kd0_populate_T( P, T, k, Table );
+//				kd0_find_end( P, T, k, res, false, vflag, r );
+//				pos = res[0];
+//				err = res[1];
+//				if (err <= k && pos>=0){
+//					if(!tflag){
+//						text.append (T.substr(pos+1)+"\n"); // Added this piece
+//					}
+//					else{
+//						string tmp = T.substr(pos+1);
+//				int tmpl = tmp.length();
+				int tmpl = min(len,n);
+				text.append (T.substr(0,tmpl)+"\n"); // Added this piece					
+//					}
+//				}
+//				else{
+//					if(!tflag){
+//						text.append (T+"\n"); // Added entire line
+//					}
+//					else{
+//						text.append (T.substr(0,min(len,n))+"\n"); // Added this piece										
+//					}
+//				delete[] Table;
+//				}
+			}
+			if (!(cnt % 10000)){
+				cout << cnt << "\n";
+			}
+		}
+
+		file.close();
+
+		cout << "\nSaving into "+outfile+"\n";
+		ofstream ofile;
+		ofile.open ( outfile.c_str() );
+		ofile << text;
+		ofile.close();
+
+		printf("Processed %i sequences.", cnt);
 
 	}
 
