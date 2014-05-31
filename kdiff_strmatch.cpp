@@ -256,8 +256,11 @@ int main(int argc, char** argv){
 		abort();
 	}
 
-	int k = atoi(kvalue);
-	printf(" - number of mismatches allowed: %d\n", k);
+	int k = 0;
+	if(eflag || bflag){
+		int k = atoi(kvalue);
+		printf(" - number of mismatches allowed: %d\n", k);
+	}
 
 	int len = -1;
 	if(tflag){
@@ -334,7 +337,7 @@ int main(int argc, char** argv){
 //				delete[] Table;
 				}
 			}
-			if (!(cnt % 10000)){
+			if (!(cnt % 10000) && (cnt>0)){
 				cout << cnt << "\n";
 			}
 		}
@@ -398,7 +401,7 @@ int main(int argc, char** argv){
 					}
 				}
 			}
-			if (!(cnt % 10000)){
+			if (!(cnt % 10000) && (cnt>0)){
 				cout << cnt << "\n";
 			}
 		}
@@ -438,7 +441,7 @@ int main(int argc, char** argv){
 				text.append (T+"\n"); // Added this line
 			}
 			else{
-//				cnt += 1;
+				cnt += 1;
 				int n = T.length();
 //				int Table[(m+1)*(n+1)]; 
 //				kd0_populate_T( P, T, k, Table );
@@ -466,7 +469,7 @@ int main(int argc, char** argv){
 //				delete[] Table;
 //				}
 			}
-			if (!(cnt % 10000)){
+			if (!(cnt % 10000) && (cnt>0)){
 				cout << cnt << "\n";
 			}
 		}
