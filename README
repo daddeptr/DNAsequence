@@ -16,6 +16,10 @@ Two files are present at the moment:
 1- a python script with testing routines
 2- a more systematic piece of software in cpp
    compile with:
-   g++ -O kdiff_strmatch.cpp -o kdiff_strmatch
+   g++ -O kdiff_strmatch.cpp -o kdiff_strmatch.x
 
    Run with -h option to print the help.
+
+   Example:
+   ./kdiff_strmatch.x -e 'TAGTC' -i 'example/sequence.fasta' -o 'example/sequence_trimmed.fasta' -v -k 1
+

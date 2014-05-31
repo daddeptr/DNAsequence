@@ -776,7 +776,7 @@ int main(int argc, char** argv){
 	string T; // Added this line  
 
 //	printf(" - ending match = %d\n", r);
-	r = atoi(rvalue);
+	if (rflag) {r = atoi(rvalue); }
 //	printf(" - ending match = %d\n", r);
 
 	if(eflag){
@@ -784,7 +784,7 @@ int main(int argc, char** argv){
 		string P = evalue;
 		int m = P.length();
 		if(!rflag){
-			r = m/2;
+			r = m;
 		}
 		else{
 			r = m - r;
@@ -835,7 +835,7 @@ int main(int argc, char** argv){
 		string P = bvalue;
 		int m = P.length();
 		if(!rflag){
-			r = m/2;
+			r = 0;
 		}
 		else{
 			r = m - r;
