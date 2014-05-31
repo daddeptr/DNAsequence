@@ -7,7 +7,7 @@
 #include <fstream>
 #include <math.h>
 //#include <set>
-//#include <algorithm>
+#include <algorithm>
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -28,13 +28,14 @@ string code_description = "-------------------------------------\n\
  http://www.yuanlei.com/studies/presentations/lit-stringmatch.pdf\n\n\
  The code accepts the following input parameters:\n\
   1) -e/-b pattern; specify the string to be searched and whether the \n\
-     end or the beginning has to be returned. One of the two must be present;\n\
+     downstream or the upstream has to be returned. Either one can be present;\n\
   2) -i input sequence file;\n\
   3) -o output sequence file. Sequences are trimmed downstream if -e if given\n\
      upstream if -b if provided;\n\
   4) -k number of allowed mismatches;\n\
   5) -r minimum number of bases at the end of the sequence;\n\
-  6) -v to display comments.\n";
+  6) -t length of the output sequence (trimming);\n\
+  7) -v to display comments.\n";
 /*
 1a- Look for IR (GTAAACTTCCGACTTCAACTG) (2 mismatches)\n\
 1b- Remove everything upstream. These are the good ones\n\
@@ -68,7 +69,6 @@ bool check_output                       = false;
 */
 
 // --------------------------------------------------------------------
-//int main(int argc, char **argv){
 int main(int argc, char** argv){
 
 	cout << code_description;
@@ -90,6 +90,7 @@ int main(int argc, char** argv){
        bool oflag = false;
        bool vflag = false;
        bool rflag = false;
+       bool tflag = false;
        
        char *bvalue = NULL;
        char *evalue = NULL;
@@ -97,6 +98,7 @@ int main(int argc, char** argv){
        char *ivalue = NULL;
        char *ovalue = NULL;
        char *rvalue = NULL;
+       char *tvalue = NULL;
 /*
        string bvalue;// = NULL;
        string evalue;// = NULL;
@@ -142,22 +144,28 @@ int main(int argc, char** argv){
 						 rflag = true;
 						 rvalue =  argv[i+1];
 					}
+					else if(c[1] == 't'){
+						 tflag = true;
+						 tvalue =  argv[i+1];
+					}
 					else if(c[1] == 'v'){
 						 vflag = true;
 					}
 					else if(c[1] == 'h'){
-						 printf( "Four (4) inputs are allowed:\n\
-						 1) -i input_filename\n\
-						 2) -o output_filename\n\
-						 3) -e/b patter_to_searched_at_end/beginning\n\
-						 4) -k number_of_mismatches\n" );
+//						 printf( "Four (4) inputs are allowed:\n\
+//						 1) -i input_filename\n\
+//						 2) -o output_filename\n\
+//						 3) -e/b patter_to_searched_at_end/beginning\n\
+//						 4) -k number_of_mismatches\n" );
+						 cout << code_description;
 					}
 					else {
-						 printf( "At least (4) inputs are allowed:\n\
-						 1) -i input_filename\n\
-						 2) -o output_filename\n\
-						 3) -e/b patter_to_searched_at_end/beginning\n\
-						 4) -k number_of_mismatches\n" );
+//						 printf( "At least (4) inputs are allowed:\n\
+//						 1) -i input_filename\n\
+//						 2) -o output_filename\n\
+//						 3) -e/b patter_to_searched_at_end/beginning\n\
+//						 4) -k number_of_mismatches\n" );
+						 cout << code_description;
 						 return 1;
 						 abort ();
 					}
@@ -249,7 +257,17 @@ int main(int argc, char** argv){
 	}
 
 	int k = atoi(kvalue);
-	printf(" - number of mismatches allowed: %d\n",k);
+	printf(" - number of mismatches allowed: %d\n", k);
+
+	int len = -1;
+	if(tflag){
+		len = atoi(tvalue);
+		printf(" - length of the returned sequence: %d\n", len);
+	}
+//	else{
+//		int len = -1;
+//	}
+	
 	string infile = ivalue;
 	string outfile = ovalue;
 
@@ -280,6 +298,7 @@ int main(int argc, char** argv){
 
 		int cnt = 0;
 
+		string tmp = "";
 // Reading sequences in fasta format line by line and performing the search on the fly
 		while (!file.eof()){
 			getline (file, T);
@@ -295,10 +314,23 @@ int main(int argc, char** argv){
 				pos = res[0];
 				err = res[1];
 				if (err <= k && pos>=0){
-					text.append (T.substr(pos+1)+"\n"); // Added this piece
+					if(!tflag){
+						text.append (T.substr(pos+1)+"\n"); // Added this piece
+					}
+					else{
+						string tmp = T.substr(pos+1);
+						int tmpl = tmp.length();
+						tmpl = min(len,tmpl);
+						text.append (tmp.substr(0,tmpl)+"\n"); // Added this piece					
+					}
 				}
 				else{
-					text.append (T+"\n"); // Added entire line			
+					if(!tflag){
+						text.append (T+"\n"); // Added entire line
+					}
+					else{
+						text.append (T.substr(0,min(len,n))+"\n"); // Added this piece										
+					}
 //				delete[] Table;
 				}
 			}
@@ -345,11 +377,23 @@ int main(int argc, char** argv){
 				pos = res[0];
 				err = res[1];
 				if (err <= k && pos>=0){
-					text.append (T.substr(0,pos+1)+"\n"); // Added this piece
+					if(!tflag){
+						text.append (T.substr(0,pos)+"\n"); // Added this piece
+					}
+					else
+					{
+						text.append (T.substr(0,min(len,n))+"\n"); // Added this piece					
+					}
 //				delete[] Table;
 				}
 				else{
-					text.append (T+"\n"); // Added entire line			
+					if(!tflag){
+						text.append (T+"\n"); // Added entire line
+					}
+					else
+					{
+						text.append (T.substr(0,min(len,n))+"\n"); // Added this piece										
+					}
 				}
 			}
 			if (!(cnt % 10000)){
