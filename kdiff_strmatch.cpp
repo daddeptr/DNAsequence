@@ -12,8 +12,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+
+//#include <boost/algorithm/string.hpp>
+//#include <vector>
 	
 using namespace std;
+//using namespace boost;
 
 string code_description = "-------------------------------------\n\
         Playing with Genome\n\
@@ -579,9 +583,17 @@ void kd0_find_start( string pattern, string text, int k, int result[2], bool Ver
 }				
 
 // --------------------------------------------------------------------
-int main(int argc, char **argv){
+//int main(int argc, char **argv){
+int main(int argc, char** argv){
 
 	cout << code_description;
+//	vector <string> fields;
+//	string cmds = argv.substr(0, argv.find()' ');
+//	split( fields, s, is_any_of( " " ) );
+//	cout << "\nArguments: " << argv[1];
+
+//	int argc = 10;
+
 //	cout << "\nOption selection:\n";
 //	cout << " - search_ir =" << search_ir << "\n";
 
@@ -593,88 +605,155 @@ int main(int argc, char **argv){
        bool oflag = false;
        bool vflag = false;
        bool rflag = false;
+       
        char *bvalue = NULL;
        char *evalue = NULL;
        char *kvalue = NULL;
        char *ivalue = NULL;
        char *ovalue = NULL;
        char *rvalue = NULL;
-       int index;
-       int c;
+/*
+       string bvalue;// = NULL;
+       string evalue;// = NULL;
+       string kvalue;// = NULL;
+       string ivalue;// = NULL;
+       string ovalue;// = NULL;
+       string rvalue;// = NULL;
+*/
+//       int index;
+       char *c = NULL;
      
        opterr = 0;
      
-       while ((c = getopt (argc, argv, "e:b:k:i:o:r:hv")) != -1)
-         switch (c){
-           case 'b':
-             bflag = true;
-             bvalue = optarg;
-             break;
-           case 'e':
-             eflag = true;
-             evalue = optarg;
-             break;
-           case 'i':
-             iflag = true;
-             ivalue = optarg;
-             break;
-           case 'k':
-             kflag = true;
-             kvalue = optarg;
-             break;
-           case 'o':
-             oflag = true;
-             ovalue = optarg;
-             break;
-           case 'r':
-             rflag = true;
-             rvalue = optarg;
-             break;
-           case 'v':
-             vflag = true;
-             break;
-           case 'h':
-             printf( "Four (4) inputs are allowed:\n\
-             1) -i input_filename\n\
-             2) -o output_filename\n\
-             3) -e/b patter_to_searched_at_end/beginning\n\
-             4) -k number_of_mismatches\n" );
-             break;
-           case '?':
-             if (optopt == 'b')
-               fprintf (stderr, "Option -%c requires an argument.\n", optopt);
-             if (optopt == 'e')
-               fprintf (stderr, "Option -%c requires an argument.\n", optopt);
-             else if (optopt == 'i')
-               fprintf (stderr, "Option -%c requires an argument.\n", optopt);
-             else if (optopt == 'k')
-               fprintf (stderr, "Option -%c requires an argument.\n", optopt);
-             else if (optopt == 'o')
-               fprintf (stderr, "Option -%c requires an argument.\n", optopt);
-             else if (optopt == 'r')
-               fprintf (stderr, "Option -%c requires an argument.\n", optopt);
-             else if (isprint (optopt))
-               fprintf (stderr, "Unknown option `-%c'.\n", optopt);
-             else
-               fprintf (stderr,
-                        "Unknown option character `\\x%x'.\n",
-                        optopt);
-             return 1;
-           default:
-             abort ();
-           }
-     
-       printf ("bflag = %d, bvalue = %s\neflag = %d, evalue = %s\niflag = %d,\
-        ivalue = %s\noflag = %d, ovalue = %s\nkflag = %d, kvalue = %s\n\
-        vflag = %d\n", bflag, bvalue, eflag, evalue, iflag, ivalue, oflag, ovalue, kflag, kvalue, vflag);
+//       while ((c = getopt (argc, argv, "e:b:k:i:o:r:hv")) != -1)
+		if(argc > 1){
+			printf("\n - reading parameters...\n");
+			for (int i=1; i<argc; ++i){
+				c = argv[i];
+				if( c[0] == '-' ){
+					printf(" Valid option: %s\n", c);
+					printf(" command value: %s\n", argv[i+1]);
+					if(c[1] == 'b'){
+						 bflag = true;
+						 bvalue = argv[i+1];
+					}
+					else if(c[1] == 'e'){
+						 eflag = true;
+						 evalue =  argv[i+1];
+					}
+					else if(c[1] == 'i'){
+						 iflag = true;
+						 ivalue =  argv[i+1];
+					}
+					else if(c[1] == 'k'){
+						 kflag = true;
+						 kvalue =  argv[i+1];
+					}
+					else if(c[1] == 'o'){
+						 oflag = true;
+						 ovalue =  argv[i+1];
+					}
+					else if(c[1] == 'r'){
+						 rflag = true;
+						 rvalue =  argv[i+1];
+					}
+					else if(c[1] == 'v'){
+						 vflag = true;
+					}
+					else if(c[1] == 'h'){
+						 printf( "Four (4) inputs are allowed:\n\
+						 1) -i input_filename\n\
+						 2) -o output_filename\n\
+						 3) -e/b patter_to_searched_at_end/beginning\n\
+						 4) -k number_of_mismatches\n" );
+					}
+					else {
+						 printf( "At least (4) inputs are allowed:\n\
+						 1) -i input_filename\n\
+						 2) -o output_filename\n\
+						 3) -e/b patter_to_searched_at_end/beginning\n\
+						 4) -k number_of_mismatches\n" );
+						 return 1;
+						 abort ();
+					}
+/*
+					switch (c){
+					   case 'b':
+						 bflag = true;
+						 bvalue = optarg;
+						 break;
+					   case 'e':
+						 eflag = true;
+						 evalue = optarg;
+						 break;
+					   case 'i':
+						 iflag = true;
+						 ivalue = optarg;
+						 break;
+					   case 'k':
+						 kflag = true;
+						 kvalue = optarg;
+						 break;
+					   case 'o':
+						 oflag = true;
+						 ovalue = optarg;
+						 break;
+					   case 'r':
+						 rflag = true;
+						 rvalue = optarg;
+						 break;
+					   case 'v':
+						 vflag = true;
+						 break;
+					   case 'h':
+						 printf( "Four (4) inputs are allowed:\n\
+						 1) -i input_filename\n\
+						 2) -o output_filename\n\
+						 3) -e/b patter_to_searched_at_end/beginning\n\
+						 4) -k number_of_mismatches\n" );
+						 break;
+					   case '?':
+						 if (optopt == 'b')
+						   fprintf (stderr, "Option -%c requires an argument.\n", optopt);
+						 if (optopt == 'e')
+						   fprintf (stderr, "Option -%c requires an argument.\n", optopt);
+						 else if (optopt == 'i')
+						   fprintf (stderr, "Option -%c requires an argument.\n", optopt);
+						 else if (optopt == 'k')
+						   fprintf (stderr, "Option -%c requires an argument.\n", optopt);
+						 else if (optopt == 'o')
+						   fprintf (stderr, "Option -%c requires an argument.\n", optopt);
+						 else if (optopt == 'r')
+						   fprintf (stderr, "Option -%c requires an argument.\n", optopt);
+						 else if (isprint (optopt))
+						   fprintf (stderr, "Unknown option `-%c'.\n", optopt);
+						 else
+						   fprintf (stderr,
+									"Unknown option character `\\x%x'.\n",
+									optopt);
+						 return 1;
+					   default:
+						 abort ();
+					   }
+*/
+	 			}
+			}
+			if (bflag && eflag){
+				printf(" Warning: both -e and -b option provided. Only one accepted. Stop.");
+				abort ();
+			}
+		}
+		else{
+			printf("No input provided. Terminated.");
+			return 1;
+		}
 
-		if (bflag && eflag){
-			printf(" Warning: both -e and -b option provided. Only one accepted.");
-            abort ();
-		}     
+//		printf ("bflag = %d, bvalue = %s\neflag = %d, evalue = %s\niflag = %d,\
+		ivalue = %s\noflag = %d, ovalue = %s\nkflag = %d, kvalue = %s\n\
+		vflag = %d\n", bflag, bvalue, eflag, evalue, iflag, ivalue, oflag, ovalue, kflag, kvalue, vflag);
 
-	for (index = optind; index < argc; index++)
-	printf ("Non-option argument %s\n", argv[index]);
+//	for (index = optind; index < argc; index++)
+//	printf ("Non-option argument %s\n", argv[index]);
 
 	if(!oflag){
 		ovalue = "kdiff_strmatch_output.fasta";
@@ -683,18 +762,24 @@ int main(int argc, char **argv){
 		printf(" Warning: no input file provided. Stop.");
 		abort();
 	}
-	int k = intptr_t(kvalue);
+
+	int k = atoi(kvalue);
+	printf(" - number of mismatches allowed: %d\n",k);
 	string infile = ivalue;
 	string outfile = ovalue;
 
 	int res[2];
 	int pos;
 	int err;
-	int r;
+	int r = 0;
 	string text;
 	string T; // Added this line  
 
-	if (eflag){
+//	printf(" - ending match = %d\n", r);
+	r = atoi(rvalue);
+//	printf(" - ending match = %d\n", r);
+
+	if(eflag){
 
 		string P = evalue;
 		int m = P.length();
@@ -702,10 +787,10 @@ int main(int argc, char **argv){
 			r = m/2;
 		}
 		else{
-			r = m-intptr_t(rvalue);
+			r = m - r;
 		}
 
-
+		printf(" - ending match = %d\n", r);
 		ifstream file( infile.c_str() );
 
 		int cnt = 0;
@@ -729,6 +814,7 @@ int main(int argc, char **argv){
 				}
 				else{
 					text.append (T+"\n"); // Added entire line			
+//				delete[] Table;
 				}
 			}
 			if (!(cnt % 10000)){
@@ -752,9 +838,10 @@ int main(int argc, char **argv){
 			r = m/2;
 		}
 		else{
-			r = m-intptr_t(rvalue);
+			r = m - r;
 		}
 
+		printf(" - ending match = %d\n", r);
 		ifstream file( infile.c_str() );
 
 		int cnt = 0;
@@ -774,6 +861,7 @@ int main(int argc, char **argv){
 				err = res[1];
 				if (err <= k && pos>=0){
 					text.append (T.substr(0,pos+1)+"\n"); // Added this piece
+//				delete[] Table;
 				}
 				else{
 					text.append (T+"\n"); // Added entire line			
@@ -793,6 +881,7 @@ int main(int argc, char **argv){
 		ofile.close();
 
 	}
+
 
 	cout << "\nDone. Good bye.";
 	return 0;
